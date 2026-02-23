@@ -1,0 +1,311 @@
+.boardContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 73px);
+    
+    overflow: hidden;
+    background: var(--background);
+    position: relative;
+}
+
+.boardHeader {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.boardTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.boardActions {
+    display: flex;
+    gap: 1rem;
+}
+
+.actionBtn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.primaryBtn {
+    background: var(--primary);
+    color: white;
+}
+
+.primaryBtn:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+.secondaryBtn {
+    background: var(--surface);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+}
+
+.secondaryBtn:hover {
+    background: var(--surface-hover);
+    border-color: #9ca3af;
+}
+
+.columnsWrapper {
+    flex: 1;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 1.5rem 2rem;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+
+.columnsWrapper::-webkit-scrollbar {
+    height: 10px;
+}
+
+.columnsWrapper::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .columnsWrapper::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.02);
+    }
+}
+
+.columnsWrapper::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+.columnsWrapper::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+
+.column {
+    min-width: 320px;
+    max-width: 320px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.columnHeader {
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+}
+
+.columnTitle {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.taskCount {
+    background: var(--background);
+    color: #6b7280;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+}
+
+.cardsContainer {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 50px;
+}
+
+.cardsContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cardsContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cardsContainer::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+.columnFooter {
+    padding: 0.75rem;
+    border-top: 1px solid transparent;
+}
+
+.addCardBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addCardBtn:hover {
+    background: var(--surface-hover);
+    color: var(--foreground);
+}
+
+
+.addColumnBtn {
+    min-width: 320px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.05);
+    
+    border: 2px dashed var(--border);
+    color: var(--foreground);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addColumnBtn:hover {
+    background: var(--surface);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+
+.card {
+    background: var(--background);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border);
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #9ca3af;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.cardLabels {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.label {
+    height: 6px;
+    width: 32px;
+    border-radius: 3px;
+}
+
+.cardTitle {
+    font-size: 0.95rem;
+    color: var(--foreground);
+    margin-bottom: 0.75rem;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.cardIcons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.iconWithText {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+
+
+.addInputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.autoResizeTextarea {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary);
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    resize: none;
+    min-height: 60px;
+    font-family: inherit;
+}
+
+.addInputActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
