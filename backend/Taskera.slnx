@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Taskera.Application/Taskera.Application.csproj" />
+  <Project Path="Taskera.Domain/Taskera.Domain.csproj" />
+  <Project Path="Taskera.Infrastructure/Taskera.Infrastructure.csproj" />
+  <Project Path="Taskera.Presentation/Taskera.Presentation.csproj" />
+</Solution>

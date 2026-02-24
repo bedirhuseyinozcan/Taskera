@@ -1,0 +1,6 @@
+@Taskera.Presentation_HostAddress = http://localhost:5239
+
+GET {{Taskera.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
