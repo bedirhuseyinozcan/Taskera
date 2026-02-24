@@ -34,11 +34,11 @@ export default function AboutPage() {
                     </div>
 
                     <div className={styles.contactDetails}>
-                        <a href="#" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.linkedin.com/in/bedir-%C3%B6zcan-43a452236/" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
                             <span className={styles.icon}>🔗</span>
                             <span>LinkedIn</span>
                         </a>
-                        <a href="#" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/bedirhuseyinozcan" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
                             <span className={styles.icon}>💻</span>
                             <span>GitHub</span>
                         </a>
@@ -53,11 +53,11 @@ export default function AboutPage() {
                     <div className={styles.profileSection}>
                         <div className={styles.imagePlaceholder}>
                             <Image
-                                src="/img/yunus.jpg"
+                                src="/img/yunusemre.jpg"
                                 alt="Yunus Emre Ekinci"
                                 fill
                                 className={styles.profileImage}
-                                onClick={() => setZoomedImg("/img/yunus.jpg")}
+                                onClick={() => setZoomedImg("/img/yunusemre.jpg")}
                             />
                         </div>
                         <h2 className={styles.name}>Yunus Emre Ekinci</h2>
@@ -65,11 +65,11 @@ export default function AboutPage() {
                     </div>
 
                     <div className={styles.contactDetails}>
-                        <a href="#" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.linkedin.com/in/yunus-emre-ekinci/" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
                             <span className={styles.icon}>🔗</span>
                             <span>LinkedIn</span>
                         </a>
-                        <a href="#" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/yemreekinci" className={styles.contactItem} target="_blank" rel="noopener noreferrer">
                             <span className={styles.icon}>💻</span>
                             <span>GitHub</span>
                         </a>
