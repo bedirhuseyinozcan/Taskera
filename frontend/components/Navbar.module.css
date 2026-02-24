@@ -143,6 +143,20 @@
     transition: background 0.3s;
 }
 
-.notificationBtn:hover {
+.notificationBtn:hover,
+.aboutButton:hover {
     background: var(--surface-hover);
+}
+
+.aboutButton {
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground);
+    cursor: pointer;
+    transition: background 0.3s;
 }

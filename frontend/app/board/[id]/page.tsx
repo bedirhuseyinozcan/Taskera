@@ -3,7 +3,6 @@
 import React, { useState, use } from "react";
 import styles from "./board.module.css";
 
-// Types
 interface Task {
     id: string;
     title: string;

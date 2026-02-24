@@ -7,7 +7,7 @@ import React from "react";
 
 const MOCK_BOARDS = [
   { id: "1", title: "Taskera Projesi", description: "Frontend geliştirme süreci ve tasarım adımları.", lastActive: "2 saat önce" },
-  { id: "2", title: "Pazarlama Kampanyası", description: "Q3 Sosyal Medya ve Reklam stratejileri", lastActive: "1 gün önce" },
+  { id: "2", title: "Tespih Projesi", description: "Tespih portfolyö pazarı", lastActive: "1 gün önce" },
   { id: "3", title: "Kişisel Hedefler", description: "2026 yılı okuma listesi ve spor programı", lastActive: "3 gün önce" },
 ];
 
