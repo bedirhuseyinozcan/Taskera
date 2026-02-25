@@ -3,7 +3,7 @@ using Taskera.Domain.Identity;
 
 namespace Taskera.Domain.Workspaces
 {
-    public class WorkspaceMember : BaseEntity
+    public class WorkspaceMember : Entity
     {
         public UserId UserId { get; set; }
         public TeamRole Role { get; set; }

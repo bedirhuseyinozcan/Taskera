@@ -2,17 +2,15 @@
 using Taskera.Domain.Identity;
 
 namespace Taskera.Domain.Workspaces.Events;
-public sealed class MemberAddedEvent : IDomainEvent
+public sealed class MemberRemovedEvent : IDomainEvent
 {
     public WorkspaceId WorkspaceId { get; }
     public UserId UserId { get; }
-    public TeamRole Role { get; }
     public DateTime OccurredOn { get; } = DateTime.UtcNow;
 
-    public MemberAddedEvent(WorkspaceId workspaceId, UserId userId, TeamRole role)
+    public MemberRemovedEvent(WorkspaceId workspaceId, UserId userId)
     {
         WorkspaceId = workspaceId;
         UserId = userId;
-        Role = role;
     }
 }

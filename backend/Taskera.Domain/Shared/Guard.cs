@@ -10,7 +10,7 @@
         public static void AgainstNullOrWhiteSpace(string? value, string name)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException($"{name} cannot be empty.");
+                throw new ArgumentException($"{name} cannot be empty.", name);
         }
         public static void AgainstNegativeOrZero(int value, string name)
         {

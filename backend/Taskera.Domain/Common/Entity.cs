@@ -1,11 +1,11 @@
 ﻿namespace Taskera.Domain.Common
 {
-    public class BaseEntity : IHasDomainEvents
+    public abstract class Entity : IHasDomainEvents
     {
         private readonly List<IDomainEvent> _domainEvents = new();
         public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-        protected void AddDomainEvents(IDomainEvent domainEvent)
+        protected void AddDomainEvent(IDomainEvent domainEvent)
         {
             _domainEvents.Add(domainEvent);
         }

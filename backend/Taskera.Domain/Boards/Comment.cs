@@ -4,7 +4,7 @@ using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class Comment : BaseEntity
+    public sealed class Comment : Entity
     {
         public string Content { get; private set; }
         public UserId Author { get; private set; }

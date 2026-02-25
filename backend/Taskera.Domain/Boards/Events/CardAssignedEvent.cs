@@ -7,10 +7,10 @@ namespace Taskera.Domain.Boards.Events
     {
         public Board Board { get; }
         public Card Card { get; }
-        public UserId AssignedTo { get; }
-        public DateTime OccuredOn { get; } = DateTime.UtcNow;
+        public List<UserId> AssignedTo { get; }
+        public DateTime OccurredOn { get; } = DateTime.UtcNow;
 
-        public CardAssignedEvent(Board board, Card card, UserId assignedTo)
+        public CardAssignedEvent(Board board, Card card, List<UserId> assignedTo)
         {
             Board = board;
             Card = card;

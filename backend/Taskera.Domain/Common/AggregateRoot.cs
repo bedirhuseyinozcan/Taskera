@@ -1,6 +1,6 @@
 ﻿namespace Taskera.Domain.Common
 {
-    public abstract class AggregateRoot : BaseEntity
+    public abstract class AggregateRoot : AuditableEntity
     {
     }
 }

@@ -3,24 +3,24 @@ using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class BoardList : BaseEntity
+    public sealed class BoardList : Entity
     {
-        public string Name { get; private set; }
+        public string Title { get; private set; }
         public int Order { get; private set; }
 
         private readonly List<Card> _cards = new();
         public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
-        internal BoardList(string name, int order)
+        internal BoardList(string title, int order)
         {
-            Name = name;
+            Title = title;
             Order = order;
         }
 
-        internal void Rename(string newName)
+        internal void UpdateName(string newName)
         {
             Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
-            Name = newName;
+            Title = newName;
         }
 
         internal void SetOrder(int order)
@@ -37,6 +37,24 @@ namespace Taskera.Domain.Boards
         internal void RemoveCard(Card card)
         {
             _cards.Remove(card);
+        }
+
+        internal void InsertCard(Card card, int index)
+        {
+            if (index < 0 || index > _cards.Count)
+                throw new ArgumentOutOfRangeException();
+
+            _cards.Insert(index, card);
+        }
+
+        internal void ReorderCard(int oldIndex, int newIndex)
+        {
+            if (oldIndex < 0 || oldIndex >= _cards.Count || newIndex < 0 || newIndex >= _cards.Count)
+                throw new ArgumentOutOfRangeException();
+
+            var card = _cards[oldIndex];
+            _cards.RemoveAt(oldIndex);
+            _cards.Insert(newIndex, card);
         }
     }
 }
