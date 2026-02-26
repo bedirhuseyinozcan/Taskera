@@ -3,15 +3,8 @@ using Taskera.Domain.Identity;
 
 namespace Taskera.Domain.Boards.Events
 {
-    public sealed class CardCreatedEvent : IDomainEvent
+    public sealed record CardCreatedEvent(BoardId BoardId, CardId CardId, string Title) : IDomainEvent
     {
-        public Board Board { get; }
-        public Card Card { get; }
-        public DateTime OccuredOn { get; } = DateTime.UtcNow;
-        public CardCreatedEvent(Board board, Card card)
-        {
-            Board = board;
-            Card = card;
-        }
+        public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
     }
 }

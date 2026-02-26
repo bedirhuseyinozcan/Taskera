@@ -2,14 +2,8 @@
 
 namespace Taskera.Domain.Workspaces.Events
 {
-    public class WorkspaceDeletedEvent : IDomainEvent
+    public sealed record WorkspaceDeletedEvent(WorkspaceId WorkspaceId) : IDomainEvent
     {
-        public WorkspaceId WorkspaceId { get; }
-        public DateTime OccurredOn {  get; } = DateTime.UtcNow;
-
-        public WorkspaceDeletedEvent(WorkspaceId workspaceId)
-        {
-            WorkspaceId = workspaceId;
-        }
+        public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
     }
 }

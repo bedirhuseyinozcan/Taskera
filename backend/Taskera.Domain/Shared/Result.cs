@@ -48,7 +48,9 @@ namespace Taskera.Domain.Shared
         }
 
         public static Result<T> Success(T value) => new(value);
-
         public static new Result<T> Fail(Error error) => new(error);
+
+        public static implicit operator Result<T>(T value) => Success(value);
+        public static implicit operator Result<T>(Error error) => Fail(error);
     }
 }

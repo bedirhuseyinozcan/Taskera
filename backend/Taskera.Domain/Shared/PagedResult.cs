@@ -22,6 +22,11 @@
             if (pageNumber <= 0)
                 throw new ArgumentException("PageNumber must be greater than zero.", nameof(pageNumber));
 
+            if (totalItems < 0)
+            {
+                throw new ArgumentException("Total items cannot be negative.", nameof(totalItems));
+            }
+
             Items = items ?? throw new ArgumentNullException(nameof(items));
             TotalItems = totalItems;
             PageNumber = pageNumber;

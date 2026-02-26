@@ -1,17 +1,9 @@
 ﻿using Taskera.Domain.Common;
 
-namespace Taskera.Domain.Workspaces.Events;
-public sealed class WorkspaceCreatedEvent : IDomainEvent
+namespace Taskera.Domain.Workspaces.Events
 {
-    public WorkspaceId WorkspaceId { get; }
-    public string Name { get; }
-    public string? Description { get; }
-    public DateTime OccurredOn { get; } = DateTime.UtcNow;
-
-    public WorkspaceCreatedEvent(WorkspaceId workspaceId, string name, string? description)
+    public sealed record WorkspaceCreatedEvent(WorkspaceId WorkspaceId, string Name) : IDomainEvent
     {
-        WorkspaceId = workspaceId;
-        Name = name;
-        Description = description;
+        public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
     }
 }

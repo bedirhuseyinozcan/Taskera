@@ -2,17 +2,7 @@
 using Taskera.Domain.Identity;
 
 namespace Taskera.Domain.Workspaces.Events;
-public sealed class MemberAddedEvent : IDomainEvent
+public sealed record MemberAddedEvent(WorkspaceId WorkspaceId, UserId UserId, TeamRole Role) : IDomainEvent
 {
-    public WorkspaceId WorkspaceId { get; }
-    public UserId UserId { get; }
-    public TeamRole Role { get; }
-    public DateTime OccurredOn { get; } = DateTime.UtcNow;
-
-    public MemberAddedEvent(WorkspaceId workspaceId, UserId userId, TeamRole role)
-    {
-        WorkspaceId = workspaceId;
-        UserId = userId;
-        Role = role;
-    }
+    public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
 }

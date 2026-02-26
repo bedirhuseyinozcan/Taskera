@@ -1,27 +1,31 @@
 ﻿using Taskera.Domain.Common;
-using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Identity
 {
     public sealed class UserId : ValueObject
     {
         public Guid Value { get; }
+
         private UserId(Guid value)
         {
-            Guard.AgainstNull(value, nameof(value));
+            if (value == Guid.Empty)
+                throw new ArgumentException("UserId cannot be empty.", nameof(value));
+
             Value = value;
         }
-        public static UserId Create(Guid value)
-        {
-            return new UserId(value); 
-        }
-        public static UserId New()
-        {
-            return new UserId(Guid.NewGuid()); 
-        }
+
+        public static UserId Create(Guid value) => new(value);
+        public static UserId New() => new(Guid.NewGuid());
+
+
+        public static implicit operator Guid(UserId userId) => userId.Value;
+        public static implicit operator UserId(Guid value) => new(value);
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
         }
+
+        public override string ToString() => Value.ToString();
     }
 }

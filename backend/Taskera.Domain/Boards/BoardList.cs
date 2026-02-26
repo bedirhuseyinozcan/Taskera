@@ -11,6 +11,7 @@ namespace Taskera.Domain.Boards
         private readonly List<Card> _cards = new();
         public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
+        private BoardList() { }
         internal BoardList(string title, int order)
         {
             Title = title;

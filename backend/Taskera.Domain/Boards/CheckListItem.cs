@@ -1,29 +1,29 @@
 ﻿using Taskera.Domain.Common;
 using Taskera.Domain.Shared;
 
-namespace Taskera.Domain.Boards
+namespace Taskera.Domain.Boards;
+public sealed class ChecklistItem : Entity
 {
-    public sealed class ChecklistItem : ValueObject
+    public Guid Id { get; private set; }
+    public string Title { get; private set; }
+    public bool IsCompleted { get; private set; }
+    private ChecklistItem() { }
+    internal ChecklistItem(string title)
     {
-        public string Title { get; }
-        public bool IsCompleted { get; private set; }
+        Guard.AgainstNullOrWhiteSpace(title, nameof(title));
+        Id = Guid.NewGuid();
+        Title = title;
+        IsCompleted = false;
+    }
 
-        internal ChecklistItem(string title, bool isCompleted = false)
-        {
-            Guard.AgainstNullOrWhiteSpace(title, nameof(title));
-            Title = title;
-            IsCompleted = isCompleted;
-        }
+    internal void Toggle()
+    {
+        IsCompleted = !IsCompleted;
+    }
 
-        internal void Toggle()
-        {
-            IsCompleted = !IsCompleted;
-        }
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Title;
-            yield return IsCompleted;
-        }
+    internal void UpdateTitle(string newTitle)
+    {
+        Guard.AgainstNullOrWhiteSpace(newTitle, nameof(newTitle));
+        Title = newTitle;
     }
 }
