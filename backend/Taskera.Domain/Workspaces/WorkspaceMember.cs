@@ -2,13 +2,11 @@
 using Taskera.Domain.Identity;
 using Taskera.Domain.Workspaces;
 
-public class WorkspaceMember : Entity
+public sealed class WorkspaceMember : ValueObject
 {
-    private WorkspaceMember() { } 
     public WorkspaceId WorkspaceId { get; private set; }
     public UserId UserId { get; private set; }
     public TeamRole Role { get; private set; }
-
 
     internal WorkspaceMember(WorkspaceId workspaceId, UserId userId, TeamRole role)
     {
@@ -18,12 +16,9 @@ public class WorkspaceMember : Entity
     }
 
     internal void ChangeRole(TeamRole role) => Role = role;
-
-    public override bool Equals(object? obj)
+    protected override IEnumerable<object> GetEqualityComponents()
     {
-        if (obj is not WorkspaceMember other) return false;
-        return WorkspaceId == other.WorkspaceId && UserId == other.UserId;
+        yield return WorkspaceId;
+        yield return UserId;
     }
-
-    public override int GetHashCode() => HashCode.Combine(WorkspaceId, UserId);
 }

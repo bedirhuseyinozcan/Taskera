@@ -17,7 +17,6 @@ namespace Taskera.Domain.Identity
         public static UserId Create(Guid value) => new(value);
         public static UserId New() => new(Guid.NewGuid());
 
-
         public static implicit operator Guid(UserId userId) => userId.Value;
         public static implicit operator UserId(Guid value) => new(value);
 
@@ -25,7 +24,6 @@ namespace Taskera.Domain.Identity
         {
             yield return Value;
         }
-
         public override string ToString() => Value.ToString();
     }
 }

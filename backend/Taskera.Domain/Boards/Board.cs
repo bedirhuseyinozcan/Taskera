@@ -10,6 +10,7 @@ namespace Taskera.Domain.Boards
     {
         private Board() { }
         public BoardId BoardId { get; private set; }
+        public WorkspaceId WorkspaceId { get; private set; }
         public string Name { get; private set; }
         public string? Description { get; private set; }
         public DateTime LastActivity { get; private set; }
@@ -17,18 +18,19 @@ namespace Taskera.Domain.Boards
         private readonly List<BoardList> _lists = new();
         public IReadOnlyCollection<BoardList> Lists => _lists.AsReadOnly();
 
-        private Board(BoardId boardId, string name, string? description, DateTime lastActivity)
+        private Board(BoardId boardId, WorkspaceId workspaceId, string name, string? description, DateTime lastActivity)
         {
             BoardId = boardId;
+            WorkspaceId = workspaceId;
             Name = name;
             Description = description;
             LastActivity = lastActivity;
         }
 
-        public static Board Create(string name, string? description)
+        public static Board Create(WorkspaceId workspaceId, string name, string? description)
         {
             Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-            return new Board(BoardId.New(), name, description, DateTime.UtcNow);
+            return new Board(BoardId.New(), workspaceId, name, description, DateTime.UtcNow);
         }
 
         public void Rename(string newName)
@@ -40,9 +42,8 @@ namespace Taskera.Domain.Boards
         public void AddList(string name)
         {
             Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-
             int order = _lists.Count + 1;
-            var list = new BoardList(name, order);
+            var list = new BoardList(BoardListId.New(), name, order);
             _lists.Add(list);
         }
 
@@ -54,33 +55,31 @@ namespace Taskera.Domain.Boards
             _lists[listIndex].ReorderCard(oldIndex, newIndex);
         }
 
-        public void AddCard(int listIndex, string title, string description)
+        public void AddCard(BoardListId listId, string title, string description)
         {
-            if (listIndex < 0 || listIndex >= _lists.Count)
-                throw new ArgumentOutOfRangeException();
+            var list = _lists.FirstOrDefault(l => l.BoardListId == listId);
+            if (list == null)
+                throw new InvalidOperationException("Liste bulunamadı.");
 
             var card = new Card(CardId.New(), title, description);
-            _lists[listIndex].AddCard(card);
+            list.AddCard(card);
             AddDomainEvent(new CardCreatedEvent(this.BoardId, card.CardId, title));
         }
-
-        public void MoveCard(int fromListIndex, int toListIndex, CardId cardId, int toIndex)
+        public void MoveCard(BoardListId fromListId, BoardListId toListId, CardId cardId, int toIndex)
         {
-            if (fromListIndex < 0 || fromListIndex >= _lists.Count)
-                throw new ArgumentOutOfRangeException(nameof(fromListIndex));
-            if (toListIndex < 0 || toListIndex >= _lists.Count)
-                throw new ArgumentOutOfRangeException(nameof(toListIndex));
+            var fromList = _lists.FirstOrDefault(l => l.BoardListId == fromListId);
+            var toList = _lists.FirstOrDefault(l => l.BoardListId == toListId);
 
-            var card = _lists[fromListIndex].Cards.FirstOrDefault(c => c.CardId == cardId);
+            if (fromList == null || toList == null)
+                throw new InvalidOperationException("Kaynak veya hedef liste bulunamadı.");
+
+            var card = fromList.Cards.FirstOrDefault(c => c.CardId == cardId);
             if (card == null) throw new InvalidOperationException("Kart bulunamadı.");
 
-            string fromTitle = _lists[fromListIndex].Title;
-            string toTitle = _lists[toListIndex].Title;
+            fromList.RemoveCard(card);
+            toList.InsertCard(card, toIndex);
 
-            _lists[fromListIndex].RemoveCard(card);
-            _lists[toListIndex].InsertCard(card, toIndex);
-
-            AddDomainEvent(new CardMovedEvent(this.BoardId, cardId, fromTitle, toTitle));
+            AddDomainEvent(new CardMovedEvent(this.BoardId, cardId, fromList.Title, toList.Title));
         }
 
         public void RemoveList(int index)

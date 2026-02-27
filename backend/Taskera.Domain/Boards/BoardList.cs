@@ -5,6 +5,7 @@ namespace Taskera.Domain.Boards
 {
     public sealed class BoardList : Entity
     {
+        public BoardListId BoardListId { get; private set; }
         public string Title { get; private set; }
         public int Order { get; private set; }
 
@@ -12,8 +13,9 @@ namespace Taskera.Domain.Boards
         public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
         private BoardList() { }
-        internal BoardList(string title, int order)
+        internal BoardList(BoardListId boardListId, string title, int order)
         {
+            BoardListId = boardListId;
             Title = title;
             Order = order;
         }

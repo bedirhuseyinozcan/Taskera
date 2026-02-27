@@ -55,7 +55,7 @@ namespace Taskera.Domain.Boards
         }
         internal void AddChecklistItem(string title)
         {
-            var item = new ChecklistItem(title);
+            var item = new ChecklistItem(ChecklistItemId.New(), title);
             _checklist.Add(item);
         }
     }

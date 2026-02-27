@@ -4,14 +4,14 @@ using Taskera.Domain.Shared;
 namespace Taskera.Domain.Boards;
 public sealed class ChecklistItem : Entity
 {
-    public Guid Id { get; private set; }
+    public ChecklistItemId ChecklistItemId { get; private set; }
     public string Title { get; private set; }
     public bool IsCompleted { get; private set; }
     private ChecklistItem() { }
-    internal ChecklistItem(string title)
+    internal ChecklistItem(ChecklistItemId checklistItemId, string title)
     {
         Guard.AgainstNullOrWhiteSpace(title, nameof(title));
-        Id = Guid.NewGuid();
+        ChecklistItemId = checklistItemId;
         Title = title;
         IsCompleted = false;
     }

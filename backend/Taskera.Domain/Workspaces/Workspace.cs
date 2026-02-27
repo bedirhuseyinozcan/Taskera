@@ -31,7 +31,7 @@ namespace Taskera.Domain.Workspaces
         public void AddMember(UserId userId, TeamRole role)
         {
             if (IsDeleted) 
-                throw new InvalidOperationException("Silinmiş bir çalışma alanı üzerinde işlem yapılamaz.");
+                throw new InvalidOperationException("Workspace is already deleted.");
 
             if (_members.Any(x => x.UserId == userId))
                 throw new InvalidOperationException("User already exists in workspace.");
@@ -43,6 +43,9 @@ namespace Taskera.Domain.Workspaces
         }
         public void RemoveMember(UserId userId)
         {
+            if (IsDeleted)
+                throw new InvalidOperationException("Workspace is already deleted.");
+
             var member = _members.FirstOrDefault(x => x.UserId == userId);
             if (member == null)
                 throw new InvalidOperationException("User not found.");
@@ -55,21 +58,24 @@ namespace Taskera.Domain.Workspaces
         }
         public void UpdateName(string newName)
         {
-            if (IsDeleted) 
-                throw new InvalidOperationException("Silinmiş bir çalışma alanı üzerinde işlem yapılamaz.");
+            if (IsDeleted)
+                throw new InvalidOperationException("Workspace is already deleted.");
 
             Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
             Name = newName;
         }
         public void UpdateDescription(string? description = null)
         {
+            if (IsDeleted)
+                throw new InvalidOperationException("Workspace is already deleted.");
+
             Description = description;
         }
 
         public void DeleteWorkspace()
         {
-            if (IsDeleted) 
-                throw new InvalidOperationException("Silinmiş bir çalışma alanı üzerinde işlem yapılamaz.");
+            if (IsDeleted)
+                throw new InvalidOperationException("Workspace is already deleted.");
 
             IsDeleted = true;
             DeletedAt = DateTime.UtcNow;
