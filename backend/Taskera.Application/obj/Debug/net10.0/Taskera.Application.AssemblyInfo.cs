@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Taskera.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdc3cbbac4a2541bdb34236297ac5d9cba3b46a5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ae20c1f63342cdcf2d813ff51862d14f15483a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Taskera.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Taskera.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

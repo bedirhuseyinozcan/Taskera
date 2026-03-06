@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Taskera.Domain.Identity;
-using Taskera.Domain.Shared;
-using Taskera.Domain.Workspaces;
+﻿using Taskera.Application.Abstractions.Messaging;
+using MediatR;
 
-namespace Taskera.Application.Features.Workspaces.Commands.UpdateWorkspace
-{
-    public record UpdateWorkspaceCommand(WorkspaceId WorkspaceId, UserId UserId, string Name, string? Description) : IRequest<Result<Unit>>;
-}
+namespace Taskera.Application.Features.Workspaces.Commands.UpdateWorkspace;
+
+public sealed record UpdateWorkspaceCommand(
+    Guid WorkspaceId,
+    string Name,
+    string? Description) : ICommand<Unit>; // Unit, MediatR'da "boş/void" anlamına gelir.

@@ -4,17 +4,15 @@ using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class Comment : Entity
+    public sealed class Comment : Entity<CommentId>
     {
-        public CommentId CommentId { get; private set; }
-        public string Content { get; private set; }
-        public UserId Author { get; private set; }
+        public string Content { get; private set; } = null!;
+        public UserId Author { get; private set; } = null!;
         public DateTime CreatedAt { get; private set; }
         private Comment() { }
-        internal Comment(CommentId commentId, UserId author, string content)
+        internal Comment(CommentId id, UserId author, string content) : base(id)
         {
             Guard.AgainstNullOrWhiteSpace(content, nameof(content));
-            CommentId = commentId;
             Content = content;
             Author = author;
             CreatedAt = DateTime.UtcNow;

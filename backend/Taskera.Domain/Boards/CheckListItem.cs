@@ -2,16 +2,14 @@
 using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards;
-public sealed class ChecklistItem : Entity
+public sealed class ChecklistItem : Entity<ChecklistItemId>
 {
-    public ChecklistItemId ChecklistItemId { get; private set; }
-    public string Title { get; private set; }
+    public string Title { get; private set; } = null!;
     public bool IsCompleted { get; private set; }
     private ChecklistItem() { }
-    internal ChecklistItem(ChecklistItemId checklistItemId, string title)
+    internal ChecklistItem(ChecklistItemId id, string title) : base(id)
     {
         Guard.AgainstNullOrWhiteSpace(title, nameof(title));
-        ChecklistItemId = checklistItemId;
         Title = title;
         IsCompleted = false;
     }

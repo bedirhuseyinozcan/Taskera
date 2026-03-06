@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Taskera.Domain.Identity;
-using Taskera.Domain.Shared;
+﻿using Taskera.Application.Abstractions.Messaging;
 
-namespace Taskera.Application.Features.Workspaces.Commands.CreateWorkspace
-{
-    public record CreateWorkspaceCommand(UserId OwnerId, string Name, string? Description) : IRequest<Result<Guid>>;
-}
+namespace Taskera.Application.Features.Workspaces.Commands.CreateWorkspace;
+
+public sealed record CreateWorkspaceCommand(
+    Guid OwnerId,
+    string Name,
+    string Description) : ICommand<Guid>;

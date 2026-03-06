@@ -6,21 +6,21 @@ using Taskera.Domain.Workspaces;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class Board : AggregateRoot
+    public sealed class Board : AggregateRoot<BoardId>
     {
-        private Board() { }
-        public BoardId BoardId { get; private set; }
-        public WorkspaceId WorkspaceId { get; private set; }
-        public string Name { get; private set; }
+        public WorkspaceId WorkspaceId { get; private set; } = null!;
+        public string Name { get; private set; } = null!;
         public string? Description { get; private set; }
         public DateTime LastActivity { get; private set; }
 
         private readonly List<BoardList> _lists = new();
         public IReadOnlyCollection<BoardList> Lists => _lists.AsReadOnly();
-
-        private Board(BoardId boardId, WorkspaceId workspaceId, string name, string? description, DateTime lastActivity)
+        private Board() { }
+        private Board(BoardId id, WorkspaceId workspaceId, string name, string? description, DateTime lastActivity) : base(id) 
         {
-            BoardId = boardId;
+            Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+            if (workspaceId == null) throw new ArgumentNullException(nameof(workspaceId));
+
             WorkspaceId = workspaceId;
             Name = name;
             Description = description;
@@ -57,29 +57,34 @@ namespace Taskera.Domain.Boards
 
         public void AddCard(BoardListId listId, string title, string description)
         {
-            var list = _lists.FirstOrDefault(l => l.BoardListId == listId);
+            var list = _lists.FirstOrDefault(l => l.Id == listId);
             if (list == null)
                 throw new InvalidOperationException("Liste bulunamadı.");
 
             var card = new Card(CardId.New(), title, description);
             list.AddCard(card);
-            AddDomainEvent(new CardCreatedEvent(this.BoardId, card.CardId, title));
+
+            LastActivity = DateTime.UtcNow;
+
+            AddDomainEvent(new CardCreatedEvent(this.Id, card.Id, title));
         }
         public void MoveCard(BoardListId fromListId, BoardListId toListId, CardId cardId, int toIndex)
         {
-            var fromList = _lists.FirstOrDefault(l => l.BoardListId == fromListId);
-            var toList = _lists.FirstOrDefault(l => l.BoardListId == toListId);
+            var fromList = _lists.FirstOrDefault(l => l.Id == fromListId);
+            var toList = _lists.FirstOrDefault(l => l.Id == toListId);
 
             if (fromList == null || toList == null)
                 throw new InvalidOperationException("Kaynak veya hedef liste bulunamadı.");
 
-            var card = fromList.Cards.FirstOrDefault(c => c.CardId == cardId);
+            var card = fromList.Cards.FirstOrDefault(c => c.Id == cardId);
             if (card == null) throw new InvalidOperationException("Kart bulunamadı.");
 
             fromList.RemoveCard(card);
             toList.InsertCard(card, toIndex);
 
-            AddDomainEvent(new CardMovedEvent(this.BoardId, cardId, fromList.Title, toList.Title));
+            LastActivity = DateTime.UtcNow;
+
+            AddDomainEvent(new CardMovedEvent(this.Id, cardId, fromList.Title, toList.Title));
         }
 
         public void RemoveList(int index)
@@ -96,13 +101,13 @@ namespace Taskera.Domain.Boards
         public void AssignCard(CardId cardId, List<UserId> userIds)
         {
             var card = _lists.SelectMany(l => l.Cards)
-                             .FirstOrDefault(c => c.CardId == cardId);
+                             .FirstOrDefault(c => c.Id == cardId);
 
             if (card == null)
                 throw new InvalidOperationException("Bu kart bu panoda bulunamadı.");
 
             card.Assign(userIds);
-            AddDomainEvent(new CardAssignedEvent(this.BoardId, cardId, userIds));
+            AddDomainEvent(new CardAssignedEvent(this.Id, cardId, userIds));
         }
     }
 }

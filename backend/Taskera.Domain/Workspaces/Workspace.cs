@@ -1,25 +1,24 @@
 ﻿using Taskera.Domain.Common;
 using Taskera.Domain.Identity;
+using Taskera.Domain.Identity.Enums;
 using Taskera.Domain.Shared;
 using Taskera.Domain.Workspaces.Events;
 
 namespace Taskera.Domain.Workspaces
 {
-    public sealed class Workspace : AggregateRoot
+    public sealed class Workspace : AggregateRoot<WorkspaceId>
     {
-        public WorkspaceId WorkspaceId { get; private set; }
-        public string Name { get; private set; }
+        public string Name { get; private set; } = null!;
         public string? Description { get; private set; }
 
         private readonly List<WorkspaceMember> _members = new();
         public IReadOnlyCollection<WorkspaceMember> Members => _members.AsReadOnly();
         private Workspace() { }
-        private Workspace(WorkspaceId workspaceId, string name, string? description)
+        private Workspace(WorkspaceId id, string name, string? description) : base(id)
         {
-            WorkspaceId = workspaceId;
             Name = name;
             Description = description;
-            AddDomainEvent(new WorkspaceCreatedEvent(workspaceId, Name));
+            AddDomainEvent(new WorkspaceCreatedEvent(Id, Name));
         }
         public static Workspace Create(string name, UserId ownerId, string? description = null)
         {
@@ -30,21 +29,19 @@ namespace Taskera.Domain.Workspaces
         }
         public void AddMember(UserId userId, TeamRole role)
         {
-            if (IsDeleted) 
-                throw new InvalidOperationException("Workspace is already deleted.");
+            CheckIfDeleted();
 
             if (_members.Any(x => x.UserId == userId))
                 throw new InvalidOperationException("User already exists in workspace.");
 
-            var member = new WorkspaceMember(this.WorkspaceId, userId, role);
+            var member = new WorkspaceMember(userId, role);
             _members.Add(member);
 
-            AddDomainEvent(new MemberAddedEvent(WorkspaceId, userId, role));
+            AddDomainEvent(new MemberAddedEvent(Id, userId, role));
         }
         public void RemoveMember(UserId userId)
         {
-            if (IsDeleted)
-                throw new InvalidOperationException("Workspace is already deleted.");
+            CheckIfDeleted();
 
             var member = _members.FirstOrDefault(x => x.UserId == userId);
             if (member == null)
@@ -54,32 +51,43 @@ namespace Taskera.Domain.Workspaces
                 throw new InvalidOperationException("Workspace must have at least one owner.");
 
             _members.Remove(member);
-            AddDomainEvent(new MemberRemovedEvent(WorkspaceId, userId));
+            AddDomainEvent(new MemberRemovedEvent(Id, userId));
+        }
+        public void ChangeMemberRole(UserId userId, TeamRole newRole)
+        {
+            CheckIfDeleted();
+            var member = _members.FirstOrDefault(x => x.UserId == userId);
+            if (member == null) throw new InvalidOperationException("User not found.");
+
+            member.ChangeRole(newRole);
         }
         public void UpdateName(string newName)
         {
-            if (IsDeleted)
-                throw new InvalidOperationException("Workspace is already deleted.");
+            CheckIfDeleted();
 
             Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
             Name = newName;
         }
         public void UpdateDescription(string? description = null)
         {
-            if (IsDeleted)
-                throw new InvalidOperationException("Workspace is already deleted.");
+            CheckIfDeleted();
 
             Description = description;
         }
 
         public void DeleteWorkspace()
         {
-            if (IsDeleted)
-                throw new InvalidOperationException("Workspace is already deleted.");
+            CheckIfDeleted();
 
             IsDeleted = true;
             DeletedAt = DateTime.UtcNow;
-            AddDomainEvent(new WorkspaceDeletedEvent(WorkspaceId));
+            AddDomainEvent(new WorkspaceDeletedEvent(Id));
+        }
+
+        private void CheckIfDeleted()
+        {
+            if (IsDeleted)
+                throw new InvalidOperationException("Workspace is already deleted.");
         }
     }
 }

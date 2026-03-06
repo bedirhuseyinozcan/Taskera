@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 
-namespace Taskera.Application.Features.Workspaces.Commands.CreateWorkspace
+namespace Taskera.Application.Features.Workspaces.Commands.CreateWorkspace;
+
+public sealed class CreateWorkspaceCommandValidator : AbstractValidator<CreateWorkspaceCommand>
 {
-    public class CreateWorkspaceCommandValidator : AbstractValidator<CreateWorkspaceCommand>
+    public CreateWorkspaceCommandValidator()
     {
-        public CreateWorkspaceCommandValidator() 
-        {
-            RuleFor(x => x.OwnerId).NotEmpty().WithMessage("User ID is required.");
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Workspace name cannot be empty.").MaximumLength(100).WithMessage("Workspace name can be maximum 100 characters.");
-            RuleFor(x => x.Description).MaximumLength(500).WithMessage("Workspace description can be maximum 500 characters");
-        }
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Description).MaximumLength(500);
+        RuleFor(x => x.OwnerId).NotEmpty();
     }
 }

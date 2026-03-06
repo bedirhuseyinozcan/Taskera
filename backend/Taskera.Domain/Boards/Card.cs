@@ -8,13 +8,14 @@ using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class Card : Entity
+    public sealed class Card : Entity<CardId>
     {
-        public CardId CardId { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+        public string Title { get; private set; } = null!;
+        public string Description { get; private set; } = null!;
         public DateTime? Deadline { get; private set; }
-        public List<UserId> AssignedTo { get; private set; } = new List<UserId>();
+
+        private readonly List<UserId> _assignedTo = new();
+        public IReadOnlyCollection<UserId> AssignedTo => _assignedTo.AsReadOnly();
 
         private readonly List<Comment> _comments = new();
         public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
@@ -23,10 +24,9 @@ namespace Taskera.Domain.Boards
         public IReadOnlyCollection<ChecklistItem> Checklist => _checklist.AsReadOnly();
 
         private Card() { }
-        internal Card(CardId cardId, string title, string description)
+        internal Card(CardId id, string title, string description) : base(id)
         {
             Guard.AgainstNullOrWhiteSpace(title, nameof(title));
-            CardId = cardId;
             Title = title;
             Description = description;
         }
@@ -41,13 +41,17 @@ namespace Taskera.Domain.Boards
         }
         internal void Assign(List<UserId> userIds)
         {
-            AssignedTo = userIds ?? new List<UserId>();
+            _assignedTo.Clear();
+            if (userIds != null)
+            {
+                _assignedTo.AddRange(userIds);
+            }
         }
         public void AddComment(UserId author, string content)
         {
             var comment = new Comment(CommentId.New(), author, content);
             _comments.Add(comment);
-            AddDomainEvent(new CommentAddedEvent(this.CardId, author, content));
+            AddDomainEvent(new CommentAddedEvent(this.Id, author, content));
         }
         internal void SetDeadline(DateTime? deadline)
         {

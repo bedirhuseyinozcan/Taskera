@@ -3,19 +3,17 @@ using Taskera.Domain.Shared;
 
 namespace Taskera.Domain.Boards
 {
-    public sealed class BoardList : Entity
+    public sealed class BoardList : Entity<BoardListId>
     {
-        public BoardListId BoardListId { get; private set; }
-        public string Title { get; private set; }
+        public string Title { get; private set; } = null!;
         public int Order { get; private set; }
 
         private readonly List<Card> _cards = new();
         public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
         private BoardList() { }
-        internal BoardList(BoardListId boardListId, string title, int order)
+        internal BoardList(BoardListId id, string title, int order) : base(id)
         {
-            BoardListId = boardListId;
             Title = title;
             Order = order;
         }

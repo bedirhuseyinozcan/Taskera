@@ -1,4 +1,4 @@
-﻿namespace Taskera.Domain.Identity
+﻿namespace Taskera.Domain.Identity.Enums
 {
     public enum TeamRole
     {

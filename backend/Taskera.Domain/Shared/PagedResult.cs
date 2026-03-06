@@ -7,25 +7,20 @@
         public int PageNumber { get; }
         public int PageSize { get; }
 
-        public int TotalPages =>
-            (int)Math.Ceiling((double)TotalItems / PageSize);
-
+        public int TotalPages => PageSize > 0
+            ? (int)Math.Ceiling((double)TotalItems / PageSize)
+            : 0;
+        public bool HasNextPage => PageNumber < TotalPages;
+        public bool HasPreviousPage => PageNumber > 1;
         public PagedResult(
             IReadOnlyList<T> items,
             int totalItems,
             int pageNumber,
             int pageSize)
         {
-            if (pageSize <= 0)
-                throw new ArgumentException("PageSize must be greater than zero.", nameof(pageSize));
-
-            if (pageNumber <= 0)
-                throw new ArgumentException("PageNumber must be greater than zero.", nameof(pageNumber));
-
-            if (totalItems < 0)
-            {
-                throw new ArgumentException("Total items cannot be negative.", nameof(totalItems));
-            }
+            if (pageSize <= 0) throw new ArgumentException("PageSize must be > 0", nameof(pageSize));
+            if (pageNumber <= 0) throw new ArgumentException("PageNumber must be > 0", nameof(pageNumber));
+            if (totalItems < 0) throw new ArgumentException("Total items cannot be negative", nameof(totalItems));
 
             Items = items ?? throw new ArgumentNullException(nameof(items));
             TotalItems = totalItems;
